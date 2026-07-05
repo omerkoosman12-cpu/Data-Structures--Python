@@ -1,0 +1,51 @@
+# 1. Store student names and marks in a dictionary
+student_results = {
+    'Alice': 85,
+    'Bob': 92,
+    'Charlie': 78,
+    'David': 60,
+    'Eve': 95,
+    'Frank': 88
+}
+
+print("Student Results:")
+display(student_results)
+# 2. Compute average mark
+marks = list(student_results.values())
+if marks:
+    average_mark = sum(marks) / len(marks)
+else:
+    average_mark = 0
+
+print(f"The average mark of the students is: {average_mark:.2f}")
+# 3. Find the topper
+if student_results:
+    topper_name = max(student_results, key=student_results.get)
+    topper_mark = student_results[topper_name]
+    print(f"The topper is {topper_name} with a mark of {topper_mark}")
+else:
+    print("No student results to determine a topper.")
+
+# 4. Display grade using list comprehensions
+# Define a grading function
+def assign_grade(mark):
+    if mark >= 90:
+        return 'A'
+    elif mark >= 80:
+        return 'B'
+    elif mark >= 70:
+        return 'C'
+    elif mark >= 60:
+        return 'D'
+    else:
+        return 'F'
+
+# Use list comprehension to generate grades for all students
+student_grades = [
+    (name, mark, assign_grade(mark))
+    for name, mark in student_results.items()
+]
+
+print("\nStudent Grades:")
+for student in student_grades:
+    print(f"Name: {student[0]}, Mark: {student[1]}, Grade: {student[2]}")
