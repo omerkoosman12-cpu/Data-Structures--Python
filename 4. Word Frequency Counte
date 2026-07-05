@@ -1,0 +1,58 @@
+import re
+from collections import defaultdict
+
+# 1. Define a passage
+passage = (
+    "This is a sample passage. It contains several words, some of which are repeated. "
+    "We will count the frequency of each word in this passage. This passage is interesting."
+)
+
+print("Original Passage:\n", passage)
+
+# Preprocessing: convert to lowercase, remove punctuation, and split into words
+# Remove punctuation and numbers
+cleaned_passage = re.sub(r'[^a-zA-Z\s]', '', passage).lower()
+words = cleaned_passage.split()
+
+# 2. Count how often each word appears using a dictionary
+word_counts = defaultdict(int)
+for word in words:
+    if word:
+        word_counts[word] += 1
+
+print("\nWord Frequencies (partial view):\n", dict(list(word_counts.items())[:10])) # Display first 10 for brevity
+import re
+from collections import defaultdict
+
+# 1. Define a passage
+passage = (
+    "This is a sample passage. It contains several words, some of which are repeated. "
+    "We will count the frequency of each word in this passage. This passage is interesting."
+)
+
+print("Original Passage:\n", passage)
+
+# Preprocessing: convert to lowercase, remove punctuation, and split into words
+# Remove punctuation and numbers
+cleaned_passage = re.sub(r'[^a-zA-Z\s]', '', passage).lower()
+words = cleaned_passage.split()
+
+# 2. Count how often each word appears using a dictionary
+word_counts = defaultdict(int)
+for word in words:
+    if word:
+# 3. Display top 5 most frequent words using sorted() + comprehensions
+# Sort the words by their counts in descending order
+sorted_word_counts = sorted(word_counts.items(), key=lambda item: item[1], reverse=True)
+
+# Get the top 5 most frequent words
+top_5_words = sorted_word_counts[:5]
+
+print("\nTop 5 Most Frequent Words:")
+# Using list comprehension to format the output for display
+formatted_top_words = [f"{word}: {count}" for word, count in top_5_words]
+for item in formatted_top_words:
+    print(item)
+        word_counts[word] += 1
+
+print("\nWord Frequencies (partial view):\n", dict(list(word_counts.items())[:10])) # Display first 10 for brevity
