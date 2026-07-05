@@ -1,0 +1,101 @@
+# 1. Initialize shopping cart, categories, and item prices
+shopping_cart = [] # List to store items in the cart
+unique_categories = set() # Set to track unique categories of items in the cart
+
+# Dictionary to store item prices (item_name: price)
+item_prices = {
+    'Apple': 1.50,
+    'Banana': 0.75,
+    'Milk': 3.00,
+    'Bread': 2.20,
+    'Cheese': 5.50,
+    'Eggs': 2.80,
+    'Juice': 3.50,
+    'Yogurt': 1.20
+}
+
+# Dictionary to store item categories (item_name: category)
+item_categories = {
+    'Apple': 'Fruit',
+    'Banana': 'Fruit',
+    'Milk': 'Dairy',
+    'Bread': 'Bakery',
+    'Cheese': 'Dairy',
+    'Eggs': 'Dairy',
+    'Juice': 'Beverage',
+    'Yogurt': 'Dairy'
+}
+def add_item_to_cart(item_name):
+    """Adds an item to the shopping cart and updates unique categories."""
+    if item_name in item_prices:
+        shopping_cart.append(item_name)
+        if item_name in item_categories:
+            unique_categories.add(item_categories[item_name])
+        print(f"'{item_name}' added to cart.")
+    else:
+        print(f"Error: '{item_name}' is not a recognized item.")
+
+def remove_item_from_cart(item_name):
+    """Removes an item from the shopping cart. 
+       Note: This simple version doesn't re-evaluate categories if the last item of a type is removed.
+    """
+    if item_name in shopping_cart:
+        shopping_cart.remove(item_name)
+        print(f"'{item_name}' removed from cart.")
+        # Re-evaluate unique categories after removal
+        recalculate_unique_categories()
+    else:
+        print(f"Error: '{item_name}' not found in cart.")
+
+def recalculate_unique_categories():
+    """Recalculates the unique categories based on current cart items."""
+    global unique_categories
+    unique_categories = set()
+    for item in shopping_cart:
+        if item in item_categories:
+            unique_categories.add(item_categories[item])
+
+def compute_total_bill():
+    """Computes the total bill for all items in the shopping cart."""
+    total_bill = 0
+    for item in shopping_cart:
+        if item in item_prices:
+            total_bill += item_prices[item]
+        else:
+            print(f"Warning: Price not found for '{item}'. Skipping this item.")
+    return total_bill
+
+print("Shopping cart functions defined.")
+# Add some items to the cart
+add_item_to_cart('Apple')
+add_item_to_cart('Milk')
+add_item_to_cart('Banana')
+add_item_to_cart('Cheese')
+add_item_to_cart('Milk') # Add milk again
+add_item_to_cart('Laptop') # Try to add an unrecognized item
+
+print(f"\nItems in cart: {shopping_cart}")
+print(f"Unique categories in cart: {unique_categories}")
+
+# Compute and display total bill
+current_total = compute_total_bill()
+print(f"Total bill: ${current_total:.2f}")
+
+# Remove an item
+remove_item_from_cart('Banana')
+
+print(f"\nItems in cart after removal: {shopping_cart}")
+print(f"Unique categories in cart after removal: {unique_categories}")
+
+# Compute and display total bill again
+current_total = compute_total_bill()
+print(f"Total bill after removal: ${current_total:.2f}")
+
+# Remove another item, and check categories
+remove_item_from_cart('Apple')
+print(f"\nItems in cart after second removal: {shopping_cart}")
+print(f"Unique categories in cart after second removal: {unique_categories}")
+
+
+print("Shopping cart system initialized.")
+print(f"Available item prices: {item_prices}")
