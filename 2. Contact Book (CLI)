@@ -1,0 +1,137 @@
+def add_contact(name, phone, email=None):
+    """Adds a new contact to the contact book."""
+    if name in contacts:
+        print(f"Error: Contact '{name}' already exists.")
+        return
+    if phone in phone_numbers_set:
+        print(f"Warning: Phone number {phone} is already associated with another contact.")
+        # Optionally, you could prevent adding or ask for confirmation here.
+
+    contacts[name] = {'phone': phone, 'email': email}
+    phone_numbers_set.add(phone)
+    print(f"Contact '{name}' added successfully.")
+
+def search_contact(name):
+    """Searches for a contact by name and returns their details."""
+    if name in contacts:
+        return contacts[name]
+    else:
+        return None
+
+def update_contact(name, new_phone=None, new_email=None):
+    """Updates an existing contact's phone number or email."""
+    if name not in contacts:
+        print(f"Error: Contact '{name}' not found.")
+        return
+
+    old_phone = contacts[name]['phone']
+    if new_phone and new_phone != old_phone:
+        if new_phone in phone_numbers_set:
+            print(f"Warning: New phone number {new_phone} is already in use by another contact.")
+            # Decide if you want to proceed or stop
+        else:
+            phone_numbers_set.remove(old_phone) # Remove old number from set
+            phone_numbers_set.add(new_phone)     # Add new number to set
+            contacts[name]['phone'] = new_phone
+            print(f"Phone number for '{name}' updated to {new_phone}.")
+    elif new_phone == old_phone:
+        print(f"Phone number for '{name}' is already {new_phone}.")
+
+    if new_email is not None:
+        contacts[name]['email'] = new_email
+        print(f"Email for '{name}' updated to {new_email}.")
+
+    if not new_phone and new_email is None:
+        print(f"No updates provided for '{name}'.")
+
+def delete_contact(name):
+    """Deletes a contact from the contact book."""
+    if name in contacts:
+        phone_to_remove = contacts[name]['phone']
+        del contacts[name]
+        if phone_to_remove in phone_numbers_set:
+            phone_numbers_set.remove(phone_to_remove)
+        print(f"Contact '{name}' deleted successfully.")
+    else:
+        print(f"Error: Contact '{name}' not found.")
+
+def check_for_duplicate_numbers():
+    """Checks for any duplicate phone numbers across all contacts.
+       Note: The set `phone_numbers_set` inherently prevents duplicates.
+       This function demonstrates verifying the set's integrity.
+    """
+    # If we had a list of numbers from an external source, we could check like this:
+    # all_numbers_from_dict = [details['phone'] for details in contacts.values()]
+    # if len(all_numbers_from_dict) != len(set(all_numbers_from_dict)):
+    #     print("Duplicate numbers detected among contacts!")
+    #     # Further logic to identify which ones
+    # else:
+    #     print("No duplicate numbers detected.")
+
+    # Given our current implementation using phone_numbers_set, duplicates are prevented on add/update.
+    # We can just verify the number of unique phones equals the number of contacts.
+    if len(contacts) == len(phone_numbers_set):
+        print("No duplicate phone numbers found in the contact book.")
+    else:
+        print("Warning: Discrepancy found. Some contacts might share numbers or set is out of sync.")
+def run_contact_book_cli():
+    """Runs the command-line interface for the contact book."""
+    while True:
+        print("\n--- Contact Book Menu ---")
+        print("1. Add Contact")
+        print("2. Search Contact")
+        print("3. Update Contact")
+        print("4. Delete Contact")
+        print("5. List All Contacts")
+        print("6. Check for Duplicate Numbers")
+        print("7. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            name = input("Enter contact name: ").strip()
+            phone = input("Enter phone number: ").strip()
+            email = input("Enter email (optional): ").strip()
+            add_contact(name, phone, email if email else None)
+        elif choice == '2':
+            name = input("Enter name to search: ").strip()
+            contact = search_contact(name)
+            if contact:
+                print(f"Name: {name}, Phone: {contact['phone']}, Email: {contact['email']}")
+            else:
+                print(f"Contact '{name}' not found.")
+        elif choice == '3':
+            name = input("Enter name to update: ").strip()
+            if name not in contacts:
+                print(f"Contact '{name}' not found.")
+                continue
+            current_phone = contacts[name]['phone']
+            current_email = contacts[name]['email']
+            print(f"Current Phone: {current_phone}, Current Email: {current_email}")
+            new_phone = input(f"Enter new phone number (leave blank for {current_phone}): ").strip()
+            new_email = input(f"Enter new email (leave blank for {current_email}): ").strip()
+            update_contact(name, new_phone if new_phone else None, new_email if new_email else None)
+        elif choice == '4':
+            name = input("Enter name to delete: ").strip()
+            delete_contact(name)
+        elif choice == '5':
+            if not contacts:
+                print("Contact book is empty.")
+            else:
+                print("\n--- All Contacts ---")
+                for name, details in contacts.items():
+                    print(f"Name: {name}, Phone: {details['phone']}, Email: {details['email']}")
+        elif choice == '6':
+            check_for_duplicate_numbers()
+        elif choice == '7':
+            print("Exiting Contact Book. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+# To run the CLI, uncomment the line below:
+# run_contact_book_cli()
+
+        # This should ideally not happen with current logic, but serves as a check.
+
+print("Contact management functions defined.")
